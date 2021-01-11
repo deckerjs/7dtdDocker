@@ -1,0 +1,24 @@
+version: "3.4"
+
+services:
+  sevendaystodie-svr:    
+    image: 7dtd-svr:latest
+    container_name: 7dtd-svr-1
+    build:
+      context: .
+      dockerfile: 7dtd-dockerfile    
+    ports:
+      - "26900:26900/tcp"
+      - "26901:26901/tcp"
+      - "26902:26902/tcp"
+      - "26900:26900/udp"
+      - "26901:26901/udp"
+      - "26902:26902/udp"    
+    expose:
+      - 26900
+      - 26901
+      - 26902
+    volumes:
+      - ./config/serverconfig.xml:/home/steam/7dtd-dedicated/serverconfig.xml
+      - ./config/progression.xml:/home/steam/7dtd-dedicated/Data/Config/progression.xml
+      - ./saves:/home/steam/.local/share/7DaysToDie/Saves

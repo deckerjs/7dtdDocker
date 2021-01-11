@@ -1,0 +1,28 @@
+#docker build -t 7dtd-svr -f 7dtd-dockerfile .
+FROM cm2network/steamcmd:latest
+
+ENV SERVERPORT0 26900
+ENV SERVERPORT1 26901
+ENV SERVERPORT2 26902
+
+ENV STEAMAPPID 294420
+ENV STEAMAPP 7dtd
+ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
+
+RUN bash "${STEAMCMDDIR}/steamcmd.sh" +login anonymous \
+				+force_install_dir "${STEAMAPPDIR}" \
+				+app_update "${STEAMAPPID}" \
+				+quit
+
+EXPOSE ${SERVERPORT0}
+EXPOSE ${SERVERPORT0}/udp
+EXPOSE ${SERVERPORT1}/udp
+EXPOSE ${SERVERPORT2}/udp
+
+CMD export LD_LIBRARY_PATH=${STEAMAPPDIR} && \
+    ${STEAMAPPDIR}/7DaysToDieServer.x86_64 \
+	-configfile=${STEAMAPPDIR}/serverconfig.xml \
+	-logfile ${STEAMAPPDIR}/output.log \
+	-quit -batchmode -nographics -dedicated $@
+
+
